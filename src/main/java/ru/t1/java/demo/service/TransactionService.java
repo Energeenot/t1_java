@@ -10,7 +10,6 @@ import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.repository.TransactionRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -54,5 +53,9 @@ public class TransactionService {
     public void deleteTransaction(long id) {
         log.info("Delete transaction with id {}", id);
         transactionRepository.deleteById(id);
+    }
+
+    public void createTransactions(List<Transaction> transactions) {
+        transactions.forEach(this::createTransaction);
     }
 }
