@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.t1.java.demo.aop.Metric;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.service.TransactionService;
 
@@ -24,6 +25,7 @@ public class TransactionController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Metric(limit = 100)
     public List<Transaction> getAllTransactions() {
         log.info("get all transactions");
         return transactionService.getAllTransactions();
