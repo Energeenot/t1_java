@@ -15,12 +15,16 @@ public class ErrorLogService {
         this.errorLogRepository = errorLogRepository;
     }
 
-    public void saveErrorLog(String stackTrace, String message, String methodSignature) {
-        DataSourceErrorLog log = DataSourceErrorLog.builder()
-                .stackTrace(stackTrace)
-                .message(message)
-                .methodSignature(methodSignature)
-                .build();
+//    public void saveErrorLog(String stackTrace, String message, String methodSignature) {
+//        DataSourceErrorLog log = DataSourceErrorLog.builder()
+//                .stackTrace(stackTrace)
+//                .message(message)
+//                .methodSignature(methodSignature)
+//                .build();
+//        errorLogRepository.save(log);
+//    }
+
+    public void saveErrorLog(DataSourceErrorLog log) {
         errorLogRepository.save(log);
     }
 }
