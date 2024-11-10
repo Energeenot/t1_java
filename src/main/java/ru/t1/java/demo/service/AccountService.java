@@ -54,4 +54,8 @@ public class AccountService {
         log.debug("Call method deleteAccountById {}", id);
         accountRepository.deleteById(id);
     }
+
+    public void createAccounts(List<Account> accounts) {
+        accounts.forEach(this::createAccount);
+    }
 }
