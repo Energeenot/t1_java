@@ -9,9 +9,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import ru.t1.java.demo.kafka.MetricProducer;
 import ru.t1.java.demo.model.DataSourceErrorLog;
-import ru.t1.java.demo.repository.DataSourceErrorLogRepository;
 import ru.t1.java.demo.service.ErrorLogService;
+
+import org.springframework.kafka.support.SendResult;
+import java.util.concurrent.CompletableFuture;
 
 @Aspect
 @Component
@@ -20,10 +23,12 @@ import ru.t1.java.demo.service.ErrorLogService;
 public class DataSourceErrorAspect {
 
     private final ErrorLogService errorLogService;
+    private final MetricProducer metricProducer;
 
     @Autowired
-    public DataSourceErrorAspect(ErrorLogService errorLogService) {
+    public DataSourceErrorAspect(ErrorLogService errorLogService, MetricProducer metricProducer) {
         this.errorLogService = errorLogService;
+        this.metricProducer = metricProducer;
     }
 
     @Pointcut("@annotation(ru.t1.java.demo.aop.LogDataSourceError)")
@@ -33,8 +38,21 @@ public class DataSourceErrorAspect {
     public void logDataSourceError(JoinPoint joinPoint, Throwable ex) {
         String methodSignature = joinPoint.getSignature().toShortString();
         String stackTrace = ExceptionUtils.getStackTrace(ex);
-
         log.error("Exception in method {}", methodSignature);
-        errorLogService.saveErrorLog(stackTrace, ex.getMessage(), methodSignature);
+
+        DataSourceErrorLog errorLog = DataSourceErrorLog.builder()
+                .stackTrace(stackTrace)
+                .message(ex.getMessage())
+                .methodSignature(methodSignature)
+                .build();
+
+        CompletableFuture<SendResult<String, Object>> future = metricProducer.send("t1_demo_metrics", errorLog,
+                "errorType", "DATA_SOURCE");
+        future.whenComplete((result, throwable) -> {
+            if (throwable != null) {
+                log.error("Failed to send error log to kafka {}", throwable.getMessage());
+                errorLogService.saveErrorLog(errorLog);
+            }else log.info("Successfully sent error log to kafka {}", errorLog);
+        });
     }
 }
