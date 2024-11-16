@@ -32,7 +32,7 @@ public class AccountService {
     @LogDataSourceError
     public Account getAccountById(long id) {
         log.debug("Call method getAccountById {}", id);
-        return accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        return accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account with id " + id + " not found"));
     }
 
     public List<Account> getAllAccounts() {
