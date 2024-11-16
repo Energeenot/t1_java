@@ -15,6 +15,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.t1.java.demo.dto.AccountDTO;
 import ru.t1.java.demo.dto.TransactionDTO;
+import ru.t1.java.demo.dto.TransactionRequestedDTO;
+import ru.t1.java.demo.dto.TransactionResultMessageDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,22 @@ public class KafkaConfig {
     }
 
     @Bean
+    public KafkaTemplate<String, TransactionRequestedDTO> kafkaTemplateTransaction(ProducerFactory<String, TransactionRequestedDTO> producerFactory) {
+        return new KafkaTemplate<>(producerFactoryTransaction()); // producerFactory как будто его можно использовать
+    }
+
+    // вот этот бин обеспечит более строгую типизацию, но конфигурация же одинаковая нужно ли плодить бины
+    @Bean
+    public ProducerFactory<String, TransactionRequestedDTO> producerFactoryTransaction() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+
+    @Bean
     public ConsumerFactory<String, AccountDTO> accountConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
@@ -67,7 +85,6 @@ public class KafkaConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "ru.t1.java.demo.dto.TransactionDTO");
-
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<String, TransactionDTO>(props);
     }
@@ -76,6 +93,27 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, TransactionDTO> transactionKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, TransactionDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(transactionConsumerFactory());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        return factory;
+
+    }
+
+    @Bean
+    public ConsumerFactory<String, TransactionResultMessageDTO> transactionResultConsumerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "ru.t1.java.demo.dto.TransactionResultMessageDTO");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        props.put(JsonDeserializer.TYPE_MAPPINGS, "Energeenot.secondAppForT1_java.dto.TransactionResultMessageDTO:ru.t1.java.demo.dto.TransactionResultMessageDTO");
+        return new DefaultKafkaConsumerFactory<String, TransactionResultMessageDTO>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, TransactionResultMessageDTO> transactionResultKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TransactionResultMessageDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(transactionResultConsumerFactory());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         return factory;
 
