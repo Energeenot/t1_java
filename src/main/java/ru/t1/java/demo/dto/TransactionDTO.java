@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +19,6 @@ public class TransactionDTO implements Serializable {
 
     @JsonProperty("transaction_amount")
     private double transactionAmount;
-    private LocalDateTime transactionTime;
+    @JsonProperty("account_id")
+    private long accountId;
 }
