@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.t1.java.demo.model.Account;
+import ru.t1.java.demo.model.enums.AccountType;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public class AccountDTO implements Serializable {
 
     private Long id;
     @JsonProperty("account_type")
-    private Account.AccountType accountType;
+    private AccountType accountType;
     @JsonProperty("balance")
     private double balance;
 }
