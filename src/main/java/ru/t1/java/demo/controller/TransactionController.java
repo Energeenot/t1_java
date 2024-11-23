@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.t1.java.demo.aop.Metric;
+import ru.t1.java.demo.dto.TransactionDTO;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.service.TransactionService;
 
@@ -40,9 +41,9 @@ public class TransactionController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        log.info("create transaction: {}", transaction);
-        return transactionService.createTransaction(transaction);
+    public Transaction createTransaction(@RequestBody TransactionDTO transactionDTO) {
+        log.info("create transaction: {}", transactionDTO);
+        return transactionService.createTransaction(transactionDTO);
     }
 
     @DeleteMapping("/{id}")
