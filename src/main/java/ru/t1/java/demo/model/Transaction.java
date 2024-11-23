@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Transaction extends AbstractPersistable<Long> {
 
     @Column(name = "transaction_amount")
