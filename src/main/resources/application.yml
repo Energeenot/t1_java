@@ -21,3 +21,6 @@ t1:
   kafka:
     bootstrap:
       server: ${KAFKA_SERVER:localhost:9092}
+
+transaction:
+  max-count: 3
