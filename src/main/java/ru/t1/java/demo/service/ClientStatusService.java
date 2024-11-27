@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,8 @@ public class ClientStatusService {
 
     private final RestTemplate restTemplate;
     private final JwtProvider jwtProvider;
+    @Value("${client.service.url}")
+    private String basedUrl;
 
     @Autowired
     public ClientStatusService(RestTemplate restTemplate, JwtProvider jwtProvider) {
@@ -37,7 +40,7 @@ public class ClientStatusService {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:8081/clients?clientId=" + clientId + "&accountId=" + accountId,
+                basedUrl + "/clients" + "?clientId=" + clientId + "&accountId=" + accountId,
                 HttpMethod.GET,
                 request,
                 String.class
