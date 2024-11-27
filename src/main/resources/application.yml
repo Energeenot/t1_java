@@ -24,3 +24,7 @@ t1:
 
 transaction:
   max-count: 3
+
+client:
+  service:
+    url: http://localhost:8081
