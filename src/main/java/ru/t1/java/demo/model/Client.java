@@ -33,4 +33,9 @@ public class Client extends AbstractPersistable<Long> {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ClientStatus status;
+
+    @Override
+    public void setId(Long id) {
+        super.setId(id);
+    }
 }

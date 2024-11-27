@@ -36,4 +36,8 @@ public class Account extends AbstractPersistable<Long> {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
+    @Override
+    public void setId(Long id) {
+        super.setId(id);
+    }
 }
