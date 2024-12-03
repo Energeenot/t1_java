@@ -9,7 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import ru.t1.java.demo.aop.LogDataSourceError;
+import ru.Energeenot.logging_aspect_starter.annotations.LogDataSourceError;
 import ru.t1.java.demo.dto.TransactionDTO;
 import ru.t1.java.demo.dto.TransactionRequestedDTO;
 import ru.t1.java.demo.dto.TransactionResultMessageDTO;
