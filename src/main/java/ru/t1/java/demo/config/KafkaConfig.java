@@ -28,20 +28,20 @@ public class KafkaConfig {
     @Value("${t1.kafka.bootstrap.server}")
     private String servers;
 
-    @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
-    }
-
-    @Bean
-    public ProducerFactory<String, Object> producerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(props);
-
-    }
+//    @Bean
+//    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
+//        return new KafkaTemplate<>(producerFactory);
+//    }
+//
+//    @Bean
+//    public ProducerFactory<String, Object> producerFactory() {
+//        Map<String, Object> props = new HashMap<>();
+//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
+//        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+//        return new DefaultKafkaProducerFactory<>(props);
+//
+//    }
 
     @Bean
     public KafkaTemplate<String, TransactionRequestedDTO> kafkaTemplateTransaction(ProducerFactory<String, TransactionRequestedDTO> producerFactory) {
