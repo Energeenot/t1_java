@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.t1.java.demo.aop.Metric;
+import ru.Energeenot.logging_aspect_starter.annotations.Metric;
 import ru.t1.java.demo.dto.TransactionDTO;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.service.TransactionService;
@@ -26,7 +26,7 @@ public class TransactionController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Metric(limit = 100)
+    @Metric(limit = 0)
     public List<Transaction> getAllTransactions() {
         log.info("get all transactions");
         return transactionService.getAllTransactions();
@@ -41,6 +41,7 @@ public class TransactionController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
+    @Metric(limit = 1)
     public Transaction createTransaction(@RequestBody TransactionDTO transactionDTO) {
         log.info("create transaction: {}", transactionDTO);
         return transactionService.createTransaction(transactionDTO);
