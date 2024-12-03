@@ -28,3 +28,20 @@ transaction:
 client:
   service:
     url: http://localhost:8081
+
+metric:
+  jpa-repositories:
+    enabled: true
+  db:
+    datasource:
+      url: "jdbc:postgresql://localhost:5432/t1_demo"
+      username: "postgres"
+      password: "postgresql"
+      driverClassName: org.postgresql.Driver
+    liquibase:
+      enabled: true
+      change-log: db/changelog/db.changelog-master.xml
+  kafka:
+    bootstrap:
+      server: ${KAFKA_SERVER:localhost:9092}
+    enabled: true
