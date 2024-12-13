@@ -45,3 +45,20 @@ metric:
     bootstrap:
       server: ${KAFKA_SERVER:localhost:9092}
     enabled: true
+
+unblocking:
+  period:
+    T: 5000
+  number-of-clients:
+    N: 1
+  number-of-accounts:
+    M: 1
+  service:
+    url: http://localhost:8090
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus, info
+    enabled-by-default: true
